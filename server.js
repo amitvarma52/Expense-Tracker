@@ -13,12 +13,11 @@ connectDB()
 app.use(morgon('dev'))
 app.use(express.json())
 app.use(cors())
-// API
-app.use("/api/v1/user", router);
 // route
-app.get('/',(req,res)=>{
-    res.send("<h1>hello server </h1>")
-})
+app.use("/api/v1/user", router);
+// app.get('/',(req,res)=>{
+//     res.send("<h1>hello server </h1>")
+// })
 // listen
 const PORT=8080||process.env.PORT
 app.listen(PORT,()=>{

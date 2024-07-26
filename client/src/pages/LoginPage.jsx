@@ -1,33 +1,31 @@
 /** @format */
-
-import React, { useState } from "react";
 import { Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import React, { useState } from "react";
 import Spinner from "../component/Spinner";
-const RegisterPage = () => {
+const handleLogin = (values) => {};
+const LoginPage = () => {
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
-  const handleRegister = async (values) => {
+  const handleLogin = async (values) => {
     try {
       setLoad(true);
-      await axios.post("/user/register", values);
-      message.success("user registerd successfully");
+      const {data}=await axios.post("/user/login", values);
+      message.success("loged in ");
+      localStorage.setItem("user", JSON.stringify({ ...data, password: "" }));
       setLoad(false);
       navigate("/");
     } catch (error) {
       setLoad(false);
-      message.error("invalid username or password");
+      message.error("invalid email or password");
     }
   };
   return (
-    <div className="register-page">
+    <div className="login-page">
       {load && <Spinner />}
-      <Form layout="vertical" onFinish={handleRegister}>
-        <h1>Register Page</h1>
-        <Form.Item label="name" name="name">
-          <Input></Input>
-        </Form.Item>
+      <Form layout="vertical" onFinish={handleLogin}>
+        <h1>Login Page</h1>
         <Form.Item label="email" name="email">
           <Input type="email"></Input>
         </Form.Item>
@@ -35,11 +33,11 @@ const RegisterPage = () => {
           <Input type="password"></Input>
         </Form.Item>
         <div className="d-flex"></div>
-        <Link to={"/login"}>Alredy registerd ?click here to login</Link>
-        <button className="btn btn-primary">Register</button>
+        <Link to={"/register"}>Not registerd ?click here to register</Link>
+        <button className="btn btn-primary">Login</button>
       </Form>
     </div>
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

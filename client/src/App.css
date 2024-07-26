@@ -6,7 +6,7 @@
 .content{
   height: 80vh;
 }
-.register-page{
+.register-page,.login-page{
   height: 90vh;
   display: flex;
   justify-content: center;

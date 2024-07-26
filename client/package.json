@@ -1,4 +1,5 @@
 {
+  "proxy": "localhost:8080/api/v1/user",
   "name": "client",
   "private": true,
   "version": "0.0.0",
@@ -14,7 +15,6 @@
     "antd": "^5.19.3",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
-    "concurrently": "^8.2.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",
