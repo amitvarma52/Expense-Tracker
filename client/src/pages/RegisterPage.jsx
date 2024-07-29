@@ -1,8 +1,8 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, message } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../component/Spinner";
 const RegisterPage = () => {
@@ -11,15 +11,20 @@ const RegisterPage = () => {
   const handleRegister = async (values) => {
     try {
       setLoad(true);
-      await axios.post("/user/register", values);
+      await axios.post("http://localhost:8080/api/v1/user/register", values);
       message.success("user registerd successfully");
       setLoad(false);
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       setLoad(false);
       message.error("invalid username or password");
     }
   };
+  useEffect(()=>{
+    if (localStorage.getItem('user')) {
+      navigate('/')
+    }
+  },[navigate])
   return (
     <div className="register-page">
       {load && <Spinner />}

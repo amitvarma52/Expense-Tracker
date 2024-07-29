@@ -15,6 +15,7 @@ app.use(express.json())
 app.use(cors())
 // route
 app.use("/api/v1/user", router);
+app.use("/api/v1/transection",require('./MVC/route/transactionRoute.js'))
 // app.get('/',(req,res)=>{
 //     res.send("<h1>hello server </h1>")
 // })

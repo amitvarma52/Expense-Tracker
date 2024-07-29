@@ -2,18 +2,20 @@
 import { Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "../component/Spinner";
-const handleLogin = (values) => {};
 const LoginPage = () => {
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
   const handleLogin = async (values) => {
     try {
       setLoad(true);
-      const {data}=await axios.post("/user/login", values);
+      const { data } = await axios.post(
+        "http://localhost:8080/api/v1/user/login",
+        values
+      );
       message.success("loged in ");
-      localStorage.setItem("user", JSON.stringify({ ...data, password: "" }));
+      localStorage.setItem("user", JSON.stringify({ ...data.user, password: "" }));
       setLoad(false);
       navigate("/");
     } catch (error) {
@@ -21,6 +23,12 @@ const LoginPage = () => {
       message.error("invalid email or password");
     }
   };
+  
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/");
+    }
+  }, [navigate]);
   return (
     <div className="login-page">
       {load && <Spinner />}

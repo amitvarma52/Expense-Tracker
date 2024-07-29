@@ -10,12 +10,20 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import ProtectedRoute from "./component/ProtectedRoute.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { path: "/", element: <HomePage /> },
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        ),
+      },
       { path: "/register", element: <RegisterPage /> },
       { path: "/login", element: <LoginPage /> },
     ],
