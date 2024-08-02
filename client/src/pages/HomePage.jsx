@@ -1,16 +1,18 @@
 /** @format */
-
+import { UnorderedListOutlined, AreaChartOutlined,DeleteOutlined,EditOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import Layout from "../component/layout/Layout";
 import { Form, Input, message, Modal, Select, Table, DatePicker } from "antd";
 import axios from "axios";
 import Spinner from "../component/Spinner";
 import moment from "moment";
+import Chart from "../component/Chart";
 const { RangePicker } = DatePicker;
 const HomePage = () => {
   const [load, setLoad] = useState(false);
   const [showModal, setShowModel] = useState(false);
   const [allTransection, setAllTransection] = useState([]);
+  const [viewData, setViewData] = useState("table");
   const columns = [
     {
       title: "Date",
@@ -21,7 +23,7 @@ const HomePage = () => {
     { title: "Type", dataIndex: "type" },
     { title: "Category", dataIndex: "category" },
     { title: "Refrence", dataIndex: "refrence" },
-    { title: "Actions" },
+    { title: "Actions" ,render:(text,record)=>{<div><EditOutlined/><DeleteOutlined/></div>} },
   ];
   const [frequency, setFrequency] = useState("7");
   const [selectedDate, setSelectedDate] = useState([]);
@@ -33,7 +35,7 @@ const HomePage = () => {
         setLoad(true);
         const data = await axios.post(
           "http://localhost:8080/api/v1/transection/get-transection",
-          { userid: user._id, frequency, selectedDate,type }
+          { userid: user._id, frequency, selectedDate, type }
         );
         setLoad(false);
         setAllTransection(data.data);
@@ -45,7 +47,7 @@ const HomePage = () => {
       }
     };
     getAllTransections();
-  }, [frequency, selectedDate,type]);
+  }, [frequency, selectedDate, type]);
   const handleSubmit = async (values) => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -110,6 +112,17 @@ const HomePage = () => {
               />
             )}
           </div>
+
+          <div className="switch-icons">
+            <UnorderedListOutlined
+              className={`mx-2 ${viewData == "table" ? "active" : "unactive"}`}
+              onClick={() => setViewData("table")}
+            />
+            <AreaChartOutlined
+              className={`mx-2 ${viewData == "chart" ? "active" : "unactive"}`}
+              onClick={() => setViewData("chart")}
+            />
+          </div>
           <div>
             <button
               className="btn btn-primary"
@@ -122,9 +135,11 @@ const HomePage = () => {
           </div>
         </div>
         <div className="content">
-          <Table columns={columns} dataSource={allTransection}>
-            {" "}
-          </Table>
+          {viewData == "table" ? (
+            <Table columns={columns} dataSource={allTransection} />
+          ) : (
+            <Chart allTransection={allTransection} />
+          )}
         </div>
         <Modal
           title="Add transection"
