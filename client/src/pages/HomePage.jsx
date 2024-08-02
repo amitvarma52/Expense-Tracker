@@ -1,5 +1,10 @@
 /** @format */
-import { UnorderedListOutlined, AreaChartOutlined,DeleteOutlined,EditOutlined } from "@ant-design/icons";
+import {
+  UnorderedListOutlined,
+  AreaChartOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import Layout from "../component/layout/Layout";
 import { Form, Input, message, Modal, Select, Table, DatePicker } from "antd";
@@ -13,17 +18,36 @@ const HomePage = () => {
   const [showModal, setShowModel] = useState(false);
   const [allTransection, setAllTransection] = useState([]);
   const [viewData, setViewData] = useState("table");
+  const [editable, setEditable] = useState(null);
   const columns = [
     {
       title: "Date",
       dataIndex: "date",
-      render: (text) => <span>{moment(text).format("yyyy-mm-dd")}</span>,
+      render: (text) => <span>{moment(text).format("YYYY-MM-DD")}</span>,
     },
     { title: "Amount", dataIndex: "amount" },
     { title: "Type", dataIndex: "type" },
     { title: "Category", dataIndex: "category" },
     { title: "Refrence", dataIndex: "refrence" },
-    { title: "Actions" ,render:(text,record)=>{<div><EditOutlined/><DeleteOutlined/></div>} },
+    {
+      title: "Actions",
+      render: (text, record) => (
+        <div>
+          <EditOutlined
+            onClick={() => {
+              setEditable(record);
+              setShowModel(true);
+            }}
+          />
+          <DeleteOutlined
+            className="mx-2"
+            onClick={() => {
+              handleDelete(record);
+            }}
+          />
+        </div>
+      ),
+    },
   ];
   const [frequency, setFrequency] = useState("7");
   const [selectedDate, setSelectedDate] = useState([]);
@@ -48,17 +72,44 @@ const HomePage = () => {
     };
     getAllTransections();
   }, [frequency, selectedDate, type]);
+  const handleDelete = async (record) => {
+    try {
+      setLoad(true)
+      await axios.post(
+        "http://localhost:8080/api/v1/transection/delete-transection",
+        { transactionId :record._id}
+      );
+      setLoad(false)
+      message.error("transection delete successfully")
+    } catch (error) {
+      setLoad(false)
+      message.error("unable to delete")
+    }
+  };
   const handleSubmit = async (values) => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       setLoad(true);
-      await axios.post(
-        "http://localhost:8080/api/v1/transection/add-transection",
-        { userid: user._id, ...values }
-      );
-      setLoad(false);
-      message.success("transection added successfully");
+      if (editable) {
+        await axios.post(
+          "http://localhost:8080/api/v1/transection/edit-transection",
+          {
+            payload: { ...values, userId: user._id },
+            transactionId: editable._id,
+          }
+        );
+        setLoad(false);
+        message.success("transection updated successfully");
+      } else {
+        await axios.post(
+          "http://localhost:8080/api/v1/transection/add-transection",
+          { userid: user._id, ...values }
+        );
+        setLoad(false);
+        message.success("transection added successfully");
+      }
       setShowModel(false);
+      setEditable(null);
     } catch (error) {
       setLoad(false);
       message.error("failed to add transection");
@@ -142,14 +193,18 @@ const HomePage = () => {
           )}
         </div>
         <Modal
-          title="Add transection"
+          title={editable ? "edit transection" : "Add transection"}
           footer={false}
           open={showModal}
           onCancel={() => {
             setShowModel(false);
           }}
         >
-          <Form layout="vertical" onFinish={handleSubmit}>
+          <Form
+            layout="vertical"
+            onFinish={handleSubmit}
+            initialValues={editable}
+          >
             <Form.Item label="Amount" name="amount">
               <Input type="text" />
             </Form.Item>
