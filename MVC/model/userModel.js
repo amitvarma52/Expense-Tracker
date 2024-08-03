@@ -10,16 +10,12 @@ const userSchema = mongoose.Schema(
     email: {
       type: String,
       require: [true, "email is required"],
-    },
-    email: {
-      type: String,
-      require: [true, "email is required"],
       unique: true,
     },
     password: {
       type: String,
       require: [true, "password is required"],
-    },
+    }
   },
   { timestamp: true }
 ); //for capturing record time

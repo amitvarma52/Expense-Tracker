@@ -22,14 +22,16 @@ const HomePage = () => {
   const columns = [
     {
       title: "Date",
+      key: 1,
       dataIndex: "date",
       render: (text) => <span>{moment(text).format("YYYY-MM-DD")}</span>,
     },
-    { title: "Amount", dataIndex: "amount" },
-    { title: "Type", dataIndex: "type" },
-    { title: "Category", dataIndex: "category" },
-    { title: "Refrence", dataIndex: "refrence" },
+    { key: 2, title: "Amount", dataIndex: "amount" },
+    { key: 3, title: "Type", dataIndex: "type" },
+    { key: 4, title: "Category", dataIndex: "category" },
+    { key: 5, title: "Refrence", dataIndex: "refrence" },
     {
+      key: 6,
       title: "Actions",
       render: (text, record) => (
         <div>
@@ -74,16 +76,16 @@ const HomePage = () => {
   }, [frequency, selectedDate, type]);
   const handleDelete = async (record) => {
     try {
-      setLoad(true)
+      setLoad(true);
       await axios.post(
         "http://localhost:8080/api/v1/transection/delete-transection",
-        { transactionId :record._id}
+        { transactionId: record._id }
       );
-      setLoad(false)
-      message.error("transection delete successfully")
+      setLoad(false);
+      message.error("transection delete successfully");
     } catch (error) {
-      setLoad(false)
-      message.error("unable to delete")
+      setLoad(false);
+      message.error("unable to delete");
     }
   };
   const handleSubmit = async (values) => {
@@ -117,9 +119,9 @@ const HomePage = () => {
   };
   return (
     <>
-      <Layout>
+      <Layout >
         {load && <Spinner />}
-        <div className="filters">
+        <div style={{ padding: "40px" }} className="color-3 filters text-white">
           <div>
             <h1>select frequency</h1>
             <Select

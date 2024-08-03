@@ -106,7 +106,7 @@ const Chart = ({ allTransection }) => {
           </div>
         </div>
       </div>
-      <div className="row mt-3">
+      <div className="row mt-3 mx-3" >
         <div className="col-md-4">
           <h2>category wise income</h2>
           {categories.map((category) => {
@@ -151,7 +151,7 @@ const Chart = ({ allTransection }) => {
               }, 0);
             return (
               amount > 0 && (
-                <div className="card">
+                <div className="card ">
                   <div className="card-body">
                     <div className="h5">{category}</div>
                     <Progress

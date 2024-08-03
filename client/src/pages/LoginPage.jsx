@@ -32,7 +32,7 @@ const LoginPage = () => {
   return (
     <div className="login-page">
       {load && <Spinner />}
-      <Form layout="vertical" onFinish={handleLogin}>
+      <Form layout="vertical" onFinish={handleLogin} className="form">
         <h1>Login Page</h1>
         <Form.Item label="email" name="email">
           <Input type="email"></Input>
@@ -42,7 +42,7 @@ const LoginPage = () => {
         </Form.Item>
         <div className="d-flex"></div>
         <Link to={"/register"}>Not registerd ?click here to register</Link>
-        <button className="btn btn-primary">Login</button>
+        <button className="btn btn-primary mx-3">Login</button>
       </Form>
     </div>
   );
