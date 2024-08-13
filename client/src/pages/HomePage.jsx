@@ -78,7 +78,7 @@ const HomePage = () => {
     try {
       setLoad(true);
       await axios.post(
-        "http://localhost:8080/api/v1/transection/delete-transection",
+        "https://expense-tracker-lgyw.onrender.com/api/v1/transection/delete-transection",
         { transactionId: record._id }
       );
       setLoad(false);
@@ -94,7 +94,7 @@ const HomePage = () => {
       setLoad(true);
       if (editable) {
         await axios.post(
-          "http://localhost:8080/api/v1/transection/edit-transection",
+          "https://expense-tracker-lgyw.onrender.com/api/v1/transection/edit-transection",
           {
             payload: { ...values, userId: user._id },
             transactionId: editable._id,
@@ -104,7 +104,7 @@ const HomePage = () => {
         message.success("transection updated successfully");
       } else {
         await axios.post(
-          "http://localhost:8080/api/v1/transection/add-transection",
+          "https://expense-tracker-lgyw.onrender.com/api/v1/transection/add-transection",
           { userid: user._id, ...values }
         );
         setLoad(false);

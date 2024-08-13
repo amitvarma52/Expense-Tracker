@@ -11,7 +11,10 @@ const RegisterPage = () => {
   const handleRegister = async (values) => {
     try {
       setLoad(true);
-      await axios.post("http://localhost:8080/api/v1/user/register", values);
+      await axios.post(
+        "https://expense-tracker-lgyw.onrender.com/api/v1/user/register",
+        values
+      );
       message.success("user registerd successfully");
       setLoad(false);
       navigate("/login");

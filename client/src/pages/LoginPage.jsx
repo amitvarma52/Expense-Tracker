@@ -11,7 +11,7 @@ const LoginPage = () => {
     try {
       setLoad(true);
       const { data } = await axios.post(
-        "http://localhost:8080/api/v1/user/login",
+        "https://expense-tracker-lgyw.onrender.com/api/v1/user/login",
         values
       );
       message.success("loged in ");
